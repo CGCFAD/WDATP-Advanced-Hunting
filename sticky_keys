@@ -1,0 +1,14 @@
+// Source: Twitter - @JohnLaTwC
+// Finds events related to sticky keys exploit
+let PrevalentEXEHash = ProcessCreationEvents
+| where EventTime > ago(7d)
+| where FileName=~ 'cmd.exe'
+| summarize count(ComputerName) by SHA1
+| where count_ComputerName > 1000;
+PrevalentEXEHash | join kind=inner
+(
+    ProcessCreationEvents
+    | project SHA1, ComputerName , ProcessCommandLine , FileName, EventTime
+    | where EventTime > ago(1d)
+    | where FileName in~ ("utilman.exe","osk.exe","magnify.exe","narrator.exe","displayswitch.exe","atbroker.exe","sethc.exe")
+) on SHA1
