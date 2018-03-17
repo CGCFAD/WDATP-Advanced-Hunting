@@ -1,0 +1,9 @@
+// Finds TA18-074A IOCs, IP addresses from US-CERT Alert TA18-074A
+// https://www.us-cert.gov/ncas/alerts/TA18-074A
+NetworkCommunicationEvents
+| where EventTime > ago(7d)
+| where RemoteIP in ( "2.229.10.193", "41.78.157.34", "176.53.11.130", "82.222.188.18", "130.25.10.158",
+ "41.205.61.221", "193.213.49.115", "195.87.199.197", "167.114.44.14", "5.153.58.45", "187.130.251.249",
+ "184.154.150.66", "5.150.143.107")
+| project EventTime, ComputerName, RemoteIP, RemoteUrl 
+| top 100 by EventTime
