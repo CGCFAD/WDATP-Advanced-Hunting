@@ -1,0 +1,13 @@
+// Finds TA18-074A IOCs, Filenames and SHA1 hashes from US-CERT Alert TA18-074A
+// https://www.us-cert.gov/ncas/alerts/TA18-074A
+ProcessCreationEvents  
+| where EventTime > ago(7d)
+| where SHA1  in ("efdef52f017eaac4843aab506a39ac2dbf96aee5", "e1631cd86facb5724469c19c60729a8d12a00a7f",
+ "092de09e2f346b81a84113734964ad10284f142d", "65fcc51f70b2213bce4d39de56646795fd62d169",
+"c8791bcebaea85e9129e706b22e3bda43f762e4a", "f9b72a2802d2a7ff33fd2d4bbcf41188724fcaa8", 
+"b45d63d4d952e9a0715583f97a2d9edeb45ae74e", "a602b03555a505cfcfc4b5f4f716b2ba88ed4cd8", 
+"3d36e477643375030431301abaccb8287b2eecce","64f0ac82ccc4a6def48d5f9079b7c146126c6464") or 
+FileName in ("s.exe", "n.zip.dv9vpwt.partial", "Inveigh-Relay.ps1", "svcsrv.bat",
+"list.txt", "SD.bat", "ntdll.exe", "d.js", "Inveigh.ps1", "goo-AA021-1468346915-00-50-56-A5-34-B3.js")
+| project EventTime, ComputerName, InitiatingProcessFileName, FileName, ProcessCommandLine
+| top 100 by EventTime
