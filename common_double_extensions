@@ -1,0 +1,10 @@
+// Source: WDATP Shared Queries
+// Finds events that open executable files with fairly common socially engineered double extensions.
+ProcessCreationEvents 
+| where EventTime > ago(7d)
+| where FileName endswith ".pdf.exe"
+    or FileName endswith ".doc.exe"
+    or FileName endswith ".docx.exe"
+    or FileName endswith ".mp3.exe"
+| project EventTime, ComputerName, FileName, AccountSid, AccountName, AccountDomain
+| top 100 by EventTime
