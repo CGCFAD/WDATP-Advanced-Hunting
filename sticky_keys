@@ -1,4 +1,4 @@
-// Source: Twitter - @JohnLaTwC
+// Source: @JohnLaTwC - Twitter
 // Finds events related to sticky keys exploit
 let PrevalentEXEHash = ProcessCreationEvents
 | where EventTime > ago(7d)
