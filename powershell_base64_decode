@@ -1,0 +1,10 @@
+// Source: @JohnLaTwC - Twitter
+ProcessCreationEvents| where EventTime > ago(7d)
+| where FileName == "powershell.exe" and ProcessCommandLine contains " -e"
+| extend b64 = extract( "[A-Za-z0-9|+|/|=]{30,}", 0, ProcessCommandLine) 
+| where strlen(b64)> 30
+| extend utf8_decode= base64_decodestring(b64) | extend decode = replace ("\x00", "", utf8_decode) 
+| project-away utf8_decode
+| where decode contains 'Gzip' or decode contains 'IEX' or decode contains 'Invoke-Expression' or decode contains '.Write' or decode contains'.MemoryStream' or decode contains 'Invoke-Command' or decode contains 'icm ' or decode contains 'scriptblock'
+| project EventTime, ComputerName, decode, ProcessCommandLine, AccountName , InitiatingProcessFileName, InitiatingProcessParentName
+| sort by decode
