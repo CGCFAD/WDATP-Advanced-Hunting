@@ -1,0 +1,6 @@
+// Finds LaZagne Credential Dumper Usage
+ProcessCreationEvents  
+| where EventTime > ago(7d)
+| where SHA1 in ("b4ffdf4a67c3b5343e07e581ec7aa1d6a3514569") or FileName in ("laZagne.exe")
+| project EventTime, ComputerName, InitiatingProcessFileName, FileName, ProcessCommandLine
+| top 100 by EventTime
