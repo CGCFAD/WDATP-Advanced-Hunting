@@ -1,0 +1,9 @@
+// Source: WDATP Shared Queries
+// Finds all PowerShell execution events wherein the PowerShell window has been explicitly hidden.
+ProcessCreationEvents
+| where EventTime > ago(7d)
+| where InitiatingProcessFileName =~ "powershell.exe"
+| where InitiatingProcessCommandLine has "-Command"
+| where InitiatingProcessCommandLine has "-w hidden" or InitiatingProcessCommandLine has "-windowstyle hidden"
+| project EventTime, ComputerName, InitiatingProcessCommandLine
+| top 100 by EventTime
